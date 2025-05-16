@@ -1,0 +1,20 @@
+.outer-cont{
+    display: flex;
+    background: linear-gradient(220deg, red ,black);
+}
+.admin-cont{
+    margin-top: 100px;
+    padding-top: 20px;
+    border: 1px solid white;
+    width: 200px;
+    height: 60vh;
+    text-align: center;
+    color: white;
+}
+
+.admin-navs ul{
+    display: flex;
+    flex-direction: column;
+    padding:40px 20px;
+    text-align: left;
+}
