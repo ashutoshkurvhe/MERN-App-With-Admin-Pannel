@@ -6,9 +6,7 @@ import "./AdminUsers.css";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
-  // const [disabledButtons, setDisabledButtons] = useState({});
-  const { authorizationToken,user } = useAuth();
-
+  const { authorizationToken } = useAuth();
 
   const getAllUsersData = async () => {
     try {
@@ -44,18 +42,18 @@ const AdminUsers = () => {
       if (response.ok) {
         getAllUsersData();
       }
+
     } catch (error) {
       console.log(error);
     }
   };
 
-  //Promote the user
-  const promoteUser = async (id) => {
+  
+  //Upadate Admin Role
+  const updateAdminRole = async (id) => {
     try {
-      // setDisabledButtons((prev) => ({ ...prev, [id]: true })); // Disable this button
-
       const response = await fetch(
-        `http://localhost:5200/api/admin/users/makeAdmin/${id}`,
+        `http://localhost:5200/api/admin/users/updateAdminRole/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -64,23 +62,27 @@ const AdminUsers = () => {
           },
         }
       );
+
       const data = await response.json();
-      console.log("User is successfully promoted to administrator!", data);
+      console.log("Admin Role Updated Successfully:", data);
 
       if (response.ok) {
-        getAllUsersData();
-        toast.success("User is successfully promoted to administrator!");
+        getAllUsersData(); // Refresh user list
+
+        if (data.isAdmin) {
+          toast.success("User is promoted to admin");
+        } else {
+          toast.success("User is demoted from admin");
+        }
+      } else {
+        toast.error(data.message || "Admin role update failed");
       }
-      // else {
-      //   toast.error(data?.message || "Failed to promote user");
-      //   setDisabledButtons((prev) => ({ ...prev, [id]: false })); // Re-enable on failure
-      // }
     } catch (error) {
-      console.log(error);
-      toast.success(error);
+      console.error("Admin Role Update Error:", error);
+      toast.error("Something went wrong!");
     }
   };
-
+  
   useEffect(() => {
     getAllUsersData();
   }, []);
@@ -97,7 +99,7 @@ const AdminUsers = () => {
               <th>Phone</th>
               <th>Update</th>
               <th>Delete</th>
-              <th>Promote</th>
+              <th>Role</th>
             </tr>
           </thead>
           <tbody>
@@ -126,16 +128,9 @@ const AdminUsers = () => {
                   <td>
                     <button
                       className="make-admin"
-                      onClick={() => promoteUser(user._id)}
-                      // disabled={
-                      //   disabledButtons[user._id]
-                      //     ? "Promoting..."
-                      //     : user.isAdmin === "true"
-                      //     ? "Promoted"
-                      //     : "Promot"
-                      // }
+                      onClick={() => updateAdminRole(user._id)}
                     >
-                      {user.isAdmin === "true" ? "Promoted" : "Promote"}
+                      {user.isAdmin === true ? "Promoted" : "Promote"}
                     </button>
                   </td>
                 </tr>

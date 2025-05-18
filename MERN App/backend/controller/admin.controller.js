@@ -28,30 +28,27 @@ const deleteUserById = async (req,res,next) => {
 }
 
 
-const makeAdminById = async (req, res) => {
+const updateAdminRoleById = async (req, res) => {
   try {
     const userId = req.params.id;
-
-    const user = await User.findById(userId);
+    const user = await User.findById(userId); // ✅
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" }); // ✅ error in JSON
+      return res.status(404).json({ message: "User not found" });
     }
 
-    if (user.isAdmin === "admin") {
-      return res.status(400).json({ message: "User is already an admin" }); // ✅
-    }
-
-    user.isAdmin = "true";
+    user.isAdmin = !user.isAdmin; // ✅ toggle the role
     await user.save();
 
     res.status(200).json({
-      message: "User promoted to admin successfully",
-      user,
-    }); // ✅ success in JSON
+      message: user.isAdmin
+        ? "User is promoted to admin"
+        : "User is demoted from admin",
+      isAdmin: user.isAdmin,
+    });
   } catch (error) {
     console.error("MakeAdmin error:", error);
-    res.status(500).json({ message: "Internal server error" }); // ✅
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -109,4 +106,4 @@ const deleteContactById = async (req, res, next) => {
 };
 
 
-module.exports = { getAllUsers, getAllContacts,makeAdminById, deleteUserById,getUsersById,updateUserById,deleteContactById};
+module.exports = { getAllUsers, getAllContacts,updateAdminRoleById,deleteUserById,getUsersById,updateUserById,deleteContactById};

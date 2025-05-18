@@ -13,7 +13,11 @@ router.route("/users/delete/:id").delete(authMiddleware, adminMiddleware, adminC
 
 router.route("/users/update/:id").patch(authMiddleware, adminMiddleware, adminController.updateUserById);
 
-router.route("/users/makeAdmin/:id").patch(authMiddleware, adminMiddleware, adminController.makeAdminById);
+// router.route("/users/promoteUser/:id").patch(authMiddleware, adminMiddleware, adminController.promoteUserById);
+
+// router.route("/users/demoteUser/:id").patch(authMiddleware, adminMiddleware, adminController.demoteUserById);
+
+router.route("/users/updateAdminRole/:id").patch(authMiddleware, adminMiddleware, adminController.updateAdminRoleById);
 
 router.route("/contacts").get(authMiddleware, adminMiddleware, adminController.getAllContacts);
 
