@@ -3,6 +3,7 @@
   max-width: 1600px;
   margin: 0 auto;
   min-height: calc(100vh - 100px);
+  /* overflow-x: auto; */
 }
 
 .admin-header {
